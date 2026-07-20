@@ -1,4 +1,4 @@
-import { BadgeCheck, Eye, EyeOff, Headphones, LockKeyhole, Phone, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, BadgeCheck, Eye, EyeOff, Headphones, LockKeyhole, Phone, ShieldCheck, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Brand } from "../components/Brand";
@@ -29,39 +29,56 @@ export default function LoginPage({ area = "customer" }: { area?: "customer" | "
   };
 
   return (
-    <main className="min-h-screen bg-[#fff5ec] p-3 sm:p-5">
-      <div className="mx-auto max-w-[1500px] overflow-hidden rounded-[30px] border border-orange-100 bg-white shadow-[0_28px_90px_rgba(139,55,27,.15)]">
-        <header className="flex h-[74px] items-center justify-between px-5 sm:px-8"><Brand /><span className="inline-flex items-center gap-2 text-xs font-black text-slate-600"><Headphones size={18} /> 24/7 Support</span></header>
-        <section className="relative min-h-[calc(100vh-114px)] overflow-hidden bg-orange-100">
-          <picture><source media="(max-width: 767px)" srcSet="/assets/campaign-mobile-en.png" /><img src="/assets/campaign-desktop-en.png" alt="Shopee work campaign" className="absolute inset-0 h-full w-full object-cover object-center" /></picture>
-          <div className="absolute inset-0 bg-gradient-to-r from-white/88 via-white/38 to-orange-950/20 md:bg-gradient-to-r md:from-white/85 md:via-white/20 md:to-orange-950/10" />
-          <div className="relative grid min-h-[calc(100vh-114px)] items-center gap-8 px-4 py-8 sm:px-8 lg:grid-cols-[1fr_430px] lg:px-12 xl:px-20">
-            <div className="mx-auto max-w-2xl text-center lg:mx-0 lg:text-left">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/75 px-4 py-2 text-xs font-black uppercase tracking-[.16em] text-shopee-600 shadow-sm backdrop-blur"><Sparkles size={15} /> Work smarter every day</span>
-              <h1 className="mt-5 text-4xl font-black leading-[1.08] text-slate-950 sm:text-5xl xl:text-6xl">Welcome to your <span className="text-shopee-500">Shopee Work</span> account.</h1>
-              <p className="mx-auto mt-5 max-w-xl text-sm font-semibold leading-7 text-slate-700 sm:text-base lg:mx-0">Manage tasks, monitor orders, and grow your commission record through one friendly workspace.</p>
-              <div className="mt-6 hidden flex-wrap gap-3 lg:flex"><TrustChip icon={<ShieldCheck />} label="Secure access" /><TrustChip icon={<BadgeCheck />} label="Protected records" /><TrustChip icon={<Headphones />} label="Always supported" /></div>
-            </div>
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,#fff7ed_0%,#fffaf7_38%,#f8fafc_100%)] sm:p-5 lg:p-7">
+      <div className="mx-auto min-h-screen max-w-[1450px] overflow-hidden bg-white shadow-[0_30px_100px_rgba(124,45,18,.14)] sm:min-h-[calc(100vh-40px)] sm:rounded-[32px] sm:border sm:border-orange-100 lg:min-h-[calc(100vh-56px)]">
+        <header className="flex h-[68px] items-center justify-between border-b border-slate-100 bg-white px-4 sm:h-[76px] sm:px-8">
+          <Brand />
+          <span className="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-[11px] font-black text-slate-600 sm:text-xs"><Headphones size={17} /> 24/7 Support</span>
+        </header>
 
-            <div className="mx-auto w-full max-w-md rounded-[28px] border border-white/80 bg-white/94 p-5 shadow-[0_24px_70px_rgba(84,38,23,.18)] backdrop-blur-xl sm:p-7">
-              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-shopee-500 to-orange-400 text-white shadow-float">{area === "admin" ? <ShieldCheck size={23} /> : <LockKeyhole size={23} />}</div>
-              <h2 className="mt-5 text-2xl font-black text-slate-950">{area === "admin" ? "Administrator access" : "Sign in to Shopee Work"}</h2>
-              <p className="mt-1 text-sm font-semibold text-slate-500">{area === "admin" ? "Manage members, tasks, and finance requests." : "Continue to your tasks, balance, and rewards."}</p>
-              <form onSubmit={submit} className="mt-6 grid gap-4">
-                <label className="relative"><Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-shopee-500" /><input className={`${inputClass} h-14 pl-12`} required value={form.identifier} onChange={(event) => setForm({ ...form, identifier: event.target.value })} placeholder="Username or phone number" aria-label="Username or phone number" /></label>
-                <label className="relative"><LockKeyhole size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-shopee-500" /><input className={`${inputClass} h-14 pl-12 pr-12`} required type={showPassword ? "text" : "password"} value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} placeholder="Password" aria-label="Password" /><button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-2 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-xl text-slate-400 hover:bg-slate-100" aria-label="Show password">{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button></label>
-                {message && <Notice message={message} tone="error" />}
-                <Button loading={loading} className="h-[52px] w-full text-base">Sign in</Button>
-              </form>
-              {area === "customer" ? <div className="mt-5 grid gap-3 text-center"><span className="text-xs font-bold text-slate-400">or</span><Link to="/register" className="inline-flex h-12 items-center justify-center rounded-2xl border border-shopee-300 text-sm font-black text-shopee-500 transition hover:bg-shopee-50">Register now</Link></div> : <div className="mt-5 text-center"><Link to="/login" className="text-sm font-black text-shopee-500">Back to customer sign in</Link></div>}
-              <div className="mt-6 grid grid-cols-3 divide-x divide-slate-100 border-t border-slate-100 pt-5 text-center"><MiniTrust icon={<ShieldCheck />} label="Secure" /><MiniTrust icon={<BadgeCheck />} label="Protected" /><MiniTrust icon={<Headphones />} label="Support" /></div>
+        <div className="grid lg:min-h-[calc(100vh-132px)] lg:grid-cols-[minmax(0,1.28fr)_minmax(410px,.72fr)]">
+          <section className="relative min-h-[220px] overflow-hidden bg-orange-100 sm:min-h-[330px] lg:min-h-full">
+            <picture><source media="(max-width: 639px)" srcSet="/assets/campaign-mobile-en.png" /><img src="/assets/campaign-desktop-en.png" alt="Shopee Super Shopping Day campaign" className="absolute inset-0 h-full w-full object-cover object-top lg:object-center" /></picture>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent sm:from-slate-950/55 lg:from-slate-950/70" />
+
+            <div className="absolute inset-x-4 bottom-4 hidden max-w-xl rounded-[26px] border border-white/15 bg-slate-950/82 p-5 text-white shadow-2xl backdrop-blur-md sm:block sm:inset-x-auto sm:bottom-6 sm:left-6 sm:right-6 lg:bottom-8 lg:left-8 lg:p-7 xl:left-10">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.16em] text-orange-200"><Sparkles size={14} /> Work smarter every day</span>
+              <h1 className="mt-4 text-3xl font-black leading-tight sm:text-4xl">One workspace for every task, order, and reward.</h1>
+              <p className="mt-3 max-w-lg text-sm font-semibold leading-6 text-white/75">Stay organized, track progress, and manage your Shopee Work activity with clarity.</p>
+              <div className="mt-5 flex flex-wrap gap-2"><HeroTrust icon={<ShieldCheck />} label="Secure access" /><HeroTrust icon={<BadgeCheck />} label="Protected records" /><HeroTrust icon={<Headphones />} label="Always supported" /></div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          <section className="flex items-center bg-white px-5 py-8 sm:px-10 sm:py-10 lg:px-10 xl:px-14">
+            <div className="mx-auto w-full max-w-[430px]">
+              <div className={`grid h-[52px] w-[52px] place-items-center rounded-2xl text-white shadow-lg ${area === "admin" ? "bg-slate-900 shadow-slate-900/20" : "bg-gradient-to-br from-shopee-500 to-orange-400 shadow-shopee-500/20"}`}>{area === "admin" ? <ShieldCheck size={24} /> : <LockKeyhole size={24} />}</div>
+              <p className="mt-6 text-[11px] font-black uppercase tracking-[.18em] text-shopee-500">{area === "admin" ? "Secure staff portal" : "Welcome back"}</p>
+              <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-[34px]">{area === "admin" ? "Administrator access" : "Sign in to Shopee Work"}</h2>
+              <p className="mt-3 text-sm font-semibold leading-6 text-slate-500">{area === "admin" ? "Sign in to manage members, tasks, and finance requests." : "Continue to your tasks, balance, and commission history."}</p>
+
+              <form onSubmit={submit} className="mt-7 grid gap-5">
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  <span>Username or phone number</span>
+                  <span className="relative"><Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-shopee-500" /><input className={`${inputClass} h-14 border-slate-200 bg-slate-50 pl-12 focus:bg-white`} required autoComplete="username" value={form.identifier} onChange={(event) => setForm({ ...form, identifier: event.target.value })} placeholder="Enter your username or phone" /></span>
+                </label>
+                <label className="grid gap-2 text-sm font-black text-slate-700">
+                  <span>Password</span>
+                  <span className="relative"><LockKeyhole size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-shopee-500" /><input className={`${inputClass} h-14 border-slate-200 bg-slate-50 pl-12 pr-12 focus:bg-white`} required autoComplete="current-password" type={showPassword ? "text" : "password"} value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} placeholder="Enter your password" /><button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-2 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-xl text-slate-400 transition hover:bg-white hover:text-slate-700" aria-label={showPassword ? "Hide password" : "Show password"}>{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button></span>
+                </label>
+                {message && <Notice message={message} tone="error" />}
+                <Button loading={loading} className="h-14 w-full rounded-2xl text-base">Sign in <ArrowRight size={18} /></Button>
+              </form>
+
+              {area === "customer" ? <div className="mt-7 border-t border-slate-100 pt-6 text-center"><p className="text-xs font-bold text-slate-400">New to Shopee Work?</p><Link to="/register" className="mt-3 inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-shopee-200 bg-shopee-50 text-sm font-black text-shopee-600 transition hover:border-shopee-300 hover:bg-shopee-100">Create an account <ArrowRight size={16} /></Link></div> : <div className="mt-7 border-t border-slate-100 pt-6 text-center"><Link to="/login" className="text-sm font-black text-shopee-500 hover:text-shopee-600">← Back to customer sign in</Link></div>}
+
+              <div className="mt-7 grid grid-cols-3 divide-x divide-slate-100 rounded-2xl bg-slate-50 px-2 py-4 text-center"><MiniTrust icon={<ShieldCheck />} label="Secure" /><MiniTrust icon={<BadgeCheck />} label="Protected" /><MiniTrust icon={<Headphones />} label="Support" /></div>
+            </div>
+          </section>
+        </div>
       </div>
     </main>
   );
 }
 
-function TrustChip({ icon, label }: { icon: React.ReactNode; label: string }) { return <span className="inline-flex items-center gap-2 rounded-2xl border border-white/80 bg-white/70 px-3 py-2 text-xs font-black text-slate-700 backdrop-blur">{icon}{label}</span>; }
+function HeroTrust({ icon, label }: { icon: React.ReactNode; label: string }) { return <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-[11px] font-black text-white/85">{icon}{label}</span>; }
 function MiniTrust({ icon, label }: { icon: React.ReactNode; label: string }) { return <span className="grid place-items-center gap-1 text-[10px] font-black text-slate-500"><span className="text-shopee-500">{icon}</span>{label}</span>; }
