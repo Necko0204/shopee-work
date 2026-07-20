@@ -5,7 +5,7 @@
   "workspaces": ["client", "server"],
   "scripts": {
     "dev": "concurrently -n WEB,API -c magenta,cyan \"npm run dev -w client\" \"npm run dev -w server\"",
-    "build": "npm run build -w client && npm run build -w server",
+    "build": "npm run db:generate && npm run build -w client && npm run build -w server",
     "typecheck": "npm run typecheck -w client && npm run typecheck -w server",
     "db:generate": "npm run db:generate -w server",
     "db:migrate": "npm run db:migrate -w server",

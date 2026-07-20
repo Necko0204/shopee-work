@@ -87,7 +87,7 @@ npm run build
 npm run start -w server
 ```
 
-The Express process serves both the compiled React application and `/api` in production.
+The build generates Prisma Client before compiling the React and Express applications. The Express process then serves both the compiled React application and `/api` in production.
 
 ## Render deployment with Neon
 
