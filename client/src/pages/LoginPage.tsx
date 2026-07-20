@@ -1,15 +1,13 @@
 import { BadgeCheck, Eye, EyeOff, Headphones, LockKeyhole, Phone, ShieldCheck, Sparkles } from "lucide-react";
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Brand } from "../components/Brand";
 import { Button, inputClass, Notice } from "../components/Ui";
 import { api } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import type { User } from "../types";
 
-export default function LoginPage() {
-  const [params] = useSearchParams();
-  const area = params.get("area") === "admin" ? "admin" : "customer";
+export default function LoginPage({ area = "customer" }: { area?: "customer" | "admin" }) {
   const [form, setForm] = useState({ identifier: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
@@ -55,7 +53,7 @@ export default function LoginPage() {
                 {message && <Notice message={message} tone="error" />}
                 <Button loading={loading} className="h-[52px] w-full text-base">Sign in</Button>
               </form>
-              {area === "customer" ? <div className="mt-5 grid gap-3 text-center"><span className="text-xs font-bold text-slate-400">or</span><Link to="/register" className="inline-flex h-12 items-center justify-center rounded-2xl border border-shopee-300 text-sm font-black text-shopee-500 transition hover:bg-shopee-50">Register now</Link><Link to="/login?area=admin" className="text-xs font-black text-slate-400 hover:text-shopee-500">Sign in as an administrator</Link></div> : <div className="mt-5 text-center"><Link to="/login" className="text-sm font-black text-shopee-500">Back to customer sign in</Link></div>}
+              {area === "customer" ? <div className="mt-5 grid gap-3 text-center"><span className="text-xs font-bold text-slate-400">or</span><Link to="/register" className="inline-flex h-12 items-center justify-center rounded-2xl border border-shopee-300 text-sm font-black text-shopee-500 transition hover:bg-shopee-50">Register now</Link></div> : <div className="mt-5 text-center"><Link to="/login" className="text-sm font-black text-shopee-500">Back to customer sign in</Link></div>}
               <div className="mt-6 grid grid-cols-3 divide-x divide-slate-100 border-t border-slate-100 pt-5 text-center"><MiniTrust icon={<ShieldCheck />} label="Secure" /><MiniTrust icon={<BadgeCheck />} label="Protected" /><MiniTrust icon={<Headphones />} label="Support" /></div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { AuthProvider } from "./lib/auth";
+import { AuthProvider, useAuth } from "./lib/auth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -11,5 +11,13 @@ import SupportPage from "./pages/SupportPage";
 import AdminPage from "./pages/AdminPage";
 
 export default function App() {
-  return <BrowserRouter><AuthProvider><Routes><Route path="/login" element={<LoginPage />} /><Route path="/register" element={<RegisterPage />} /><Route element={<ProtectedRoute roles={["CUSTOMER"]} />}><Route path="/" element={<CustomerHomePage />} /><Route path="/orders" element={<OrdersPage />} /><Route path="/finance" element={<FinancePage />} /><Route path="/profile" element={<ProfilePage />} /><Route path="/support" element={<SupportPage />} /></Route><Route element={<ProtectedRoute roles={["SUPER_ADMIN", "ADMIN", "EMPLOYEE"]} />}><Route path="/admin" element={<AdminPage />} /></Route><Route path="*" element={<Navigate to="/" replace />} /></Routes></AuthProvider></BrowserRouter>;
+  return <BrowserRouter><AuthProvider><Routes><Route path="/login" element={<LoginPage />} /><Route path="/register" element={<RegisterPage />} /><Route element={<ProtectedRoute roles={["CUSTOMER"]} />}><Route path="/" element={<CustomerHomePage />} /><Route path="/orders" element={<OrdersPage />} /><Route path="/finance" element={<FinancePage />} /><Route path="/profile" element={<ProfilePage />} /><Route path="/support" element={<SupportPage />} /></Route><Route path="/admin" element={<AdminEntry />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes></AuthProvider></BrowserRouter>;
+}
+
+function AdminEntry() {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="grid min-h-screen place-items-center bg-canvas"><div className="h-11 w-11 animate-spin rounded-full border-4 border-shopee-100 border-t-shopee-500" /></div>;
+  if (!user) return <LoginPage area="admin" />;
+  if (user.role === "CUSTOMER") return <Navigate to="/" replace />;
+  return <AdminPage />;
 }
