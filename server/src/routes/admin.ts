@@ -11,6 +11,12 @@ import { asyncHandler, HttpError, jsonSafe, requestNumber } from "../lib/http.js
 const router = Router();
 const staffRoles: UserRole[] = [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE];
 
+function databaseMembershipLevel(level: UserLevel): UserLevel {
+  if (level === UserLevel.VVIP) return UserLevel.VIP;
+  if (level === UserLevel.GOLD) return UserLevel.SILVER;
+  return level;
+}
+
 const catalogProductInputSchema = z.object({
   code: z.string().trim().min(2).max(40).regex(/^[a-zA-Z0-9._-]+$/, "Use letters, numbers, dots, dashes, or underscores only.").transform((value) => value.toUpperCase()),
   name: z.string().trim().min(2).max(180),
@@ -375,6 +381,7 @@ router.patch(
       { message: "Add a short remark explaining the password reset.", path: ["remarks"] },
     ).parse(request.body);
     const memberId = String(request.params.id);
+    const storedLevel = databaseMembershipLevel(input.level);
     const existing = await prisma.user.findFirst({
       where: {
         id: memberId,
@@ -384,7 +391,7 @@ router.patch(
       select: { id: true, username: true, level: true, isActive: true, withdrawalLocked: true },
     });
     if (!existing) throw new HttpError(404, "Member account not found.");
-    if (request.auth!.role !== UserRole.SUPER_ADMIN && (input.level !== existing.level || input.active !== existing.isActive)) {
+    if (request.auth!.role !== UserRole.SUPER_ADMIN && (storedLevel !== existing.level || input.active !== existing.isActive)) {
       throw new HttpError(403, "Only a Super Admin can change membership level or account access.");
     }
 
@@ -395,7 +402,7 @@ router.patch(
       const updated = await database.user.update({
         where: { id: memberId },
         data: {
-          level: input.level,
+          level: storedLevel,
           isActive: input.active,
           withdrawalLocked: input.withdrawalLocked ?? existing.withdrawalLocked,
           ...(accountPasswordHash ? { passwordHash: accountPasswordHash } : {}),
@@ -411,7 +418,7 @@ router.patch(
           details: {
             username: existing.username,
             previousLevel: existing.level,
-            level: input.level,
+            level: storedLevel,
             previousActive: existing.isActive,
             active: input.active,
             previousWithdrawalLocked: existing.withdrawalLocked,

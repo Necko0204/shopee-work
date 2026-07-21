@@ -2,9 +2,9 @@ import { UserLevel } from "@prisma/client";
 
 export const commissionPercentByLevel: Record<UserLevel, bigint> = {
   [UserLevel.STARTER]: 15n,
-  [UserLevel.SILVER]: 15n,
+  [UserLevel.SILVER]: 25n,
   [UserLevel.GOLD]: 25n,
-  [UserLevel.VIP]: 25n,
+  [UserLevel.VIP]: 30n,
   [UserLevel.VVIP]: 30n,
 };
 

@@ -15,6 +15,12 @@ const tabs: Array<{ key: Tab; label: string; icon: typeof LayoutDashboard; super
   { key: "overview", label: "Overview", icon: LayoutDashboard }, { key: "members", label: "Members", icon: Users }, { key: "tasks", label: "Tasks & Orders", icon: ClipboardList }, { key: "topups", label: "Top-up", icon: BadgeDollarSign }, { key: "withdrawals", label: "Withdrawal", icon: Banknote }, { key: "catalog", label: "Catalog", icon: Boxes, superOnly: true }, { key: "settings", label: "Settings", icon: Settings2, superOnly: true }, { key: "staff", label: "Admin Team", icon: UserCog, superOnly: true },
 ];
 
+function storageLevelForMember(level: UserLevel): UserLevel {
+  if (level === "VVIP") return "VIP";
+  if (level === "GOLD") return "SILVER";
+  return level;
+}
+
 export default function AdminPage() {
   const { user, logout } = useAuth(); const navigate = useNavigate();
   const { t, language } = useI18n();
@@ -197,7 +203,7 @@ function Members({ members, orders, canManage, canManageSecurity, canManageWithd
       </div>
       {canManage && <div className="mt-5 grid gap-4 rounded-3xl border border-slate-200 p-4">
         <div><p className="text-sm font-black text-slate-900">Membership and access</p><p className="mt-1 text-xs font-semibold text-slate-400">Super Admin controls for account level and sign-in access.</p></div>
-        <Field label="Membership level"><select className={inputClass} value={access.level} onChange={(event) => setAccess({ ...access, level: event.target.value as UserLevel })}><option value="STARTER">Classic — 15%</option><option value="VIP">VIP — 25%</option><option value="VVIP">VVIP — 30%</option></select></Field>
+        <Field label="Membership level"><select className={inputClass} value={storageLevelForMember(access.level)} onChange={(event) => setAccess({ ...access, level: event.target.value as UserLevel })}><option value="STARTER">Classic — 15%</option><option value="SILVER">VIP — 25%</option><option value="VIP">VVIP — 30%</option></select></Field>
         <label className="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-slate-200 p-4"><span><span className="block text-sm font-black text-slate-800">Deactivate account</span><span className="mt-1 block text-xs font-semibold text-slate-400">Turn this on to block member sign-in and customer features.</span></span><input type="checkbox" checked={!access.active} onChange={(event) => setAccess({ ...access, active: !event.target.checked })} className="h-5 w-5 accent-[#ee4d2d]" /></label>
       </div>}
       <div className="mt-5 rounded-3xl border border-slate-200 p-4">
